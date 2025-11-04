@@ -1,4 +1,4 @@
-import {test, expect} from '../fixtures/pages';
+import {test} from '../fixtures/pages';
 import { AppData } from '../common/AppData';
 
 /**
@@ -6,7 +6,7 @@ import { AppData } from '../common/AppData';
  */
 
 test.describe('Positive Login Test', () => {
-  test('Positive Login Test', async ({ loginPage, homePage }) => {
+  test('Test case 1: Positive Login Test', async ({ loginPage, homePage }) => {
     // 1. Open login page
     await loginPage.openLoginPage();
     // 2. Perform login with valid username & password
@@ -18,7 +18,7 @@ test.describe('Positive Login Test', () => {
 });
 
 test.describe('Negative Login Test', () => {
-  test('Negative username test', async ({ loginPage, homePage }) => {
+  test('Test case 2: Negative username test', async ({ loginPage}) => {
     // 1. Open login page  
     await loginPage.openLoginPage();
     // 2. Perform login with invalid username & valid password
@@ -27,7 +27,7 @@ test.describe('Negative Login Test', () => {
     await loginPage.verifyInvalidUsernameError();
   });
 
-  test('Negative password test', async ({ loginPage, homePage }) => {
+  test('Test case 3: Negative password test', async ({ loginPage}) => {
     // 1. Open login page  
     await loginPage.openLoginPage();
     // 2. Perform login with valid username & invalid password
@@ -36,3 +36,4 @@ test.describe('Negative Login Test', () => {
     await loginPage.verifyInvalidPasswordError();
   });
 });
+
