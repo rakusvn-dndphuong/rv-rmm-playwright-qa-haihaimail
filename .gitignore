@@ -1,17 +1,25 @@
 # Dependencies
 node_modules/
 
-# Playwright output
-playwright-report/
-test-results/
-
-# Environment variables (mỗi bộ test 1 file)
+# Credentials — never commit (one file per suite)
 .env
-.env.important
-.env.all-function
+.env.*
+!.env.example
 
-# Dữ liệu theo bộ test (chứa tài khoản thật — không commit)
-tests/data/important/users.json
-tests/data/important/preconditions.json
-tests/data/all-function/users.json
-tests/data/all-function/preconditions.json
+# Per-suite data holding real accounts and environment-specific records
+src/data/*/users.json
+src/data/*/preconditions.json
+
+# Session state produced by the auth setup projects
+playwright/.auth/
+
+# Test run artifacts
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# Logs and scratch files
+*.log
+.DS_Store
+Thumbs.db
