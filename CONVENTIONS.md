@@ -6,10 +6,27 @@
 |------|--------|-------|
 | Page Object | `PascalCase` + `Page.ts` | `LoginPage.ts`, `DashboardPage.ts` |
 | Component | `PascalCase` + `.ts` | `Header.ts`, `LoginModal.ts` |
-| Spec/Test | `kebab-case` + `.spec.ts` | `login.spec.ts`, `user-management.spec.ts` |
-| Test data (raw) | `camelCase` plural + `.json` | `users.json`, `products.json` |
-| Test data (logic) | cùng tên với `.ts` | `users.ts`, `products.ts` |
+| Spec/Test | `kebab-case` + `.spec.ts`, đặt trong `specs/<suite>/` | `login.spec.ts`, `user-management.spec.ts` |
+| Test data (raw, theo bộ test) | `camelCase` + `.json`, đặt trong `data/<suite>/` | `data/important/users.json`, `data/all-function/preconditions.json` |
+| Test data mẫu | `<tên>.example.json` (commit), file thật gitignore | `users.example.json` |
+| Test data (logic) | helper trong `data/index.ts` | `getUser(suite, role)` |
+| Env | `.env.<suite>` | `.env.important`, `.env.all-function` |
 | Fixtures | `index.ts` | `tests/fixtures/index.ts` |
+
+## Bộ test (suite)
+
+Có 2 bộ test chạy trên 2 môi trường khác nhau, tương ứng 2 project Playwright:
+
+| Suite | Thư mục spec | Env |
+|-------|--------------|-----|
+| `important` | `tests/specs/important/` | `.env.important` |
+| `all-function` | `tests/specs/all-function/` | `.env.all-function` |
+
+- Pages, Components, Fixtures **dùng chung** cho cả hai bộ
+- Môi trường (`BASE_URL`), tài khoản (`users.json`) và data tiền đề (`preconditions.json`) **tách theo bộ**
+- Không hardcode URL, tài khoản trong spec — dùng `baseURL` của project và `getUser(suite, role)`
+- Spec chỉ được nằm trong thư mục của bộ mình, không import spec bộ khác
+- `.env.*`, `users.json`, `preconditions.json` thật **không commit**; chỉ commit `.env.example` và `*.example.json`
 
 ## Locators
 
@@ -95,12 +112,12 @@ test.describe('Login Page', () => {
 
 4. **Data helper** — không index trực tiếp, dùng helper function:
    ```typescript
-   const admin = getAdminUser();   // ✅
-   const admin = users[0];         // ❌
+   const admin = getUser(suite, 'admin');   // ✅
+   const admin = users[0];                  // ❌
    ```
 
 5. **Import `test` từ fixtures**, không từ `@playwright/test`:
    ```typescript
-   import { test, expect } from '../fixtures';  // ✅
-   import { test } from '@playwright/test';     // ❌ trong spec
+   import { test, expect } from '../../fixtures';  // ✅ (spec nằm trong specs/<suite>/)
+   import { test } from '@playwright/test';        // ❌ trong spec
    ```

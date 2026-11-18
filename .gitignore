@@ -5,8 +5,13 @@ node_modules/
 playwright-report/
 test-results/
 
-# Environment variables
+# Environment variables (mỗi bộ test 1 file)
 .env
+.env.important
+.env.all-function
 
-# Test credentials (contains real username/password — never commit)
-tests/data/credentials.json
+# Dữ liệu theo bộ test (chứa tài khoản thật — không commit)
+tests/data/important/users.json
+tests/data/important/preconditions.json
+tests/data/all-function/users.json
+tests/data/all-function/preconditions.json

@@ -1,10 +1,12 @@
 {
-  "name": "my-automation",
+  "name": "rv-rmm-playwright-qa-haihaimail",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "playwright test",
+    "test:important": "playwright test --project=important",
+    "test:all-function": "playwright test --project=all-function",
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed --workers=1",
     "test:report": "playwright show-report",

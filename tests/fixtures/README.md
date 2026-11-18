@@ -62,5 +62,6 @@ test('...', async ({ loginPage }) => { ... });
 
 ## Lưu ý
 
-- Mọi spec file phải `import { test, expect } from '../fixtures'`
+- Mọi spec file phải `import { test, expect } from '../../fixtures'` (spec nằm trong `specs/important/` hoặc `specs/all-function/`)
 - `expect` cũng được re-export từ đây để tiện dùng
+- Fixture `suite` (`'important'` | `'all-function'`) do `use.suite` của từng project trong `playwright.config.ts` set; dùng để lấy đúng data: `getUser(suite, 'admin')`

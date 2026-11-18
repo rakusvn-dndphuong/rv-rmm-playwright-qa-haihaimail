@@ -1,10 +1,22 @@
 import { defineConfig, devices } from '@playwright/test';
 import * as dotenv from 'dotenv';
+import * as fs from 'fs';
+import * as path from 'path';
 
-dotenv.config({ quiet: true });
+type Suite = 'important' | 'all-function';
 
-export default defineConfig({
-  testDir: './tests/specs',
+/** Đọc .env.<suite> của từng bộ test (không ghi đè process.env để 2 bộ không lẫn nhau). */
+const loadEnv = (suite: Suite): Record<string, string> => {
+  const file = path.resolve(__dirname, `.env.${suite}`);
+  return fs.existsSync(file) ? dotenv.parse(fs.readFileSync(file)) : {};
+};
+
+const env = {
+  important: loadEnv('important'),
+  'all-function': loadEnv('all-function'),
+};
+
+export default defineConfig<{ suite: Suite }>({
   fullyParallel: true,
   timeout: 60_000,
   expect: {
@@ -13,7 +25,6 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: [['html'], ['list']],
   use: {
-    baseURL: process.env.BASE_URL,
     ignoreHTTPSErrors: true,
     acceptDownloads: true,
     screenshot: 'only-on-failure',
@@ -22,8 +33,22 @@ export default defineConfig({
   },
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: 'important',
+      testDir: './tests/specs/important',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: env.important.BASE_URL,
+        suite: 'important',
+      },
+    },
+    {
+      name: 'all-function',
+      testDir: './tests/specs/all-function',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: env['all-function'].BASE_URL,
+        suite: 'all-function',
+      },
     },
   ],
 });

@@ -6,8 +6,11 @@ import { AppointmentFormCommonSettingPage } from '../pages/AppointmentFormCommon
 import { EditAppointmentFormCommonSettingPage } from '../pages/EditAppointmentFormCommonSettingPage';
 import { Header } from '../components/Header';
 import { Modal } from '../components/Modal';
+import type { Suite } from '../data';
 
 type Fixtures = {
+  /** Bộ test đang chạy — set bởi `use.suite` của từng project trong playwright.config.ts */
+  suite: Suite;
   homePage: HomePage;
   loginPage: LoginPage;
   appointmentFormListPage: AppointmentFormListPage;
@@ -18,6 +21,7 @@ type Fixtures = {
 };
 
 export const test = base.extend<Fixtures>({
+  suite: ['important', { option: true }],
   homePage: async ({ page }, use) => {
     await use(new HomePage(page));
   },
